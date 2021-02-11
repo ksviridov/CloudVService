@@ -13,14 +13,14 @@
 
     <form action="{{route('api-add')}}" method="post" enctype="multipart/form-data">
         @csrf
-        <h2>Добавление видео</h2>
+        <h2>Add video</h2>
 
         <div>
             <input type="file" id="video" name="video" value="{{old('video')}}" required>
         </div>
 
 
-        <button type="submit">Добавить</button>
+        <button type="submit">Submit</button>
     </form>
     </body>
 </html>

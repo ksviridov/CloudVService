@@ -15,3 +15,4 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('add', [VideoController::class, 'add'])->name('add');
+Route::get('result', [VideoController::class, 'result'])->name('result');

@@ -17,7 +17,8 @@ class CreateVideosTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('path');
-            $table->string('info');
+            $table->string('job_id');
+            $table->text('check_result');
             $table->timestamps();
         });
     }
