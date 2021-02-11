@@ -21,3 +21,4 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::post('add', [VideoController::class, 'saveToS3'])->name('api-add');
+Route::post('result', [VideoController::class, 'getCheckResult'])->name('api-result');
