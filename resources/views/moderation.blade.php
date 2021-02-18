@@ -11,7 +11,7 @@
     </head>
     <body>
 
-    <form action="{{route('api-add')}}" method="post" enctype="multipart/form-data">
+    <form action="{{route('moderationResults')}}" method="post" enctype="multipart/form-data">
         @csrf
         <h2>Add video</h2>
 
