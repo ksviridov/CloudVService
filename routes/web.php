@@ -14,5 +14,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('add', [VideoController::class, 'add'])->name('add');
+Route::get('moderation', [VideoController::class, 'moderation'])->name('moderation');
+Route::post('moderation', [VideoController::class, 'moderationResults'])->name('moderationResults');
+
+
 Route::get('result', [VideoController::class, 'result'])->name('result');
+
+Route::get('label', [VideoController::class, 'label'])->name('label');
+Route::post('label', [VideoController::class, 'labelCheckResults'])->name('labelCheckResults');
+
+Route::get('test', [VideoController::class, 'test'])->name('test');

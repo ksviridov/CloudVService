@@ -10,48 +10,61 @@ use Aws\Rekognition\RekognitionClient;
 class VideoController extends Controller
 {
 
-    public function add(){
-        return view('add');
+    public function moderation(){
+        return view('moderation');
     }
 
-    public function saveToS3(Request $request){
+    public function moderationResults(Request $request){
         $tf = $request->file('video')->store('videos', 's3');
 
-        $path = Storage::url($tf);
+        $video = Video::videoCreate($tf);
 
-        $video = Video::create([
-            'name' => basename($tf),
-            'path' => $tf,
-            'job_id' => '',
-            'check_result' => '',
-        ]);
+        $video->startModeration();
+
+        $result = $video->getCheckResult('moderation');
 
 
-        $videoCheckResult = $video->startVideoCheck();
 
-        return redirect('add')->with([
-            'message' => $videoCheckResult,
-            'name' => $video->name
-        ]);
+
+//        return view('moderation')->with([
+////            'message' => $videoCheckResult,
+////            'name' => $video->name
+//        ]);
+        return $result;
 
     }
 
-    public function result(){
-        return view('result');
+
+    public function label(){
+        return view('label');
+    }
+    public function labelCheckResults(Request $request){
+        $tf = $request->file('video')->store('videos', 's3');
+
+        $video = Video::videoCreate($tf);
+
+        $video->startLabelVideoCheck();
+
+        $result = $video->getCheckResult('label');
+//        $jobId = Video::
+//        if ($request->type == 'dogs'){
+////            Video::getLabelCheckResult();
+//        }
+//
+//        return view('add');
+
+        return $result;
     }
 
-    public function getCheckResult(Request $request){
-        $video = Video::where('name', '=', $request->name)->get()->first();
-        if ($video->check_result == ''){
-            $result = substr(Video::getResult($video->job_id), strpos(Video::getResult($video->job_id), '{'));
 
-            $video->check_result = json_decode($result, true);
-            $video->save();
-        }
+    public function test(){
+        $rClient = Video::getRClient();
 
+        $result = $rClient->getContentModeration([
+            'JobId' => '18df217c7910f52dd5f59060b49997a89741cf6c592f6f1a634950b758fc5af8'
+        ]);
 
-        return $video->check_result;
-
+        return $result;
     }
 
 
