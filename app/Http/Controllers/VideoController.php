@@ -53,19 +53,66 @@ class VideoController extends Controller
 //
 //        return view('add');
 
-        return $result;
+        return response($this->label(),200)->with([
+            'items' => $result,
+            'message' =>'File uploaded'
+            ]);
+//        return view('label')->with('items', $result);
     }
 
 
     public function test(){
-        $rClient = Video::getRClient();
+//        $rClient = Video::getRClient();
+//
+//        $result = $rClient->getLabelDetection([
+//            'JobId' => '3caeebecf4cd98003b1b816679c0b5a838013b14466b9d6177e14ceacd072598'
+//        ]);
+//
+//        $items = Video::parseLabelResult($result->get('Labels'));
+//
+////        $items = Video::all();
+////        dd($items);
+//        return view('result', compact('items'));
 
-        $result = $rClient->getContentModeration([
-            'JobId' => '18df217c7910f52dd5f59060b49997a89741cf6c592f6f1a634950b758fc5af8'
-        ]);
 
-        return $result;
+//        $video = Video::where('id','=',9)->get();
+
+//        $video->check_result->sort
     }
 
+    public function personTrackingResult(Request $request){
+        $tf = $request->file('video')->store('videos', 's3');
 
+        $video = Video::videoCreate($tf);
+
+        $video->startPersonTracking();
+
+//        if ($video->id % 10 == 0){
+//
+//        }
+//        $result = $video->getPersonTrackingResult($video->job_id);
+
+        if ($video->id > 10){
+            $tenBehind = Video::find($video->id - 11);
+
+            $tenBehind->check_result = $tenBehind->getPersonTrackingResult($tenBehind->job_id);
+            $tenBehind->save();
+        }
+
+
+
+    }
+
+    public function person(){
+        return view('index');
+    }
+
+    public function saveToS3(Request $request){
+        $tf = $request->file('video')->store('videos', 's3');
+
+        $video = Video::videoCreate($tf);
+
+//        $video->startPersonTracking();
+
+    }
 }

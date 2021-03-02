@@ -43,9 +43,14 @@ class Video extends Model
                 $this->check_result = json_decode($result, true);
                 $this->save();
             }elseif ($type == 'label'){
-                $result = substr(self::getLabelCheckResult($this->job_id), strpos(self::getLabelCheckResult($this->job_id), '{'));
 
-                $this->check_result = json_decode($result, true);
+
+                $result = self::getLabelCheckResult($this->job_id);
+
+                $result = self::parseLabelResult($result);
+
+
+                $this->check_result = $result;
                 $this->save();
             }
         }
@@ -85,6 +90,8 @@ class Video extends Model
 
             sleep(2);
         }
+
+        $result = $result->get('Labels');
 
         return $result;
     }
@@ -142,4 +149,71 @@ class Video extends Model
         ]);
     }
 
+    public static function parseLabelResult($array){
+
+        $result = [];
+        foreach ($array as $label)
+        {
+            if($label["Label"]["Name"] == "Dog") // and $label["Label"]["Confidence"] >= 90
+            {
+                $label['Timestamp'] = $label['Timestamp'] / 1000;
+                $result[] = $label;
+            }
+        }
+
+//        dd($result);
+        return $result;
+    }
+
+    public function startPersonTracking(){
+        $rClient = self::getRClient();
+
+        $jobId = $rClient->startPersonTracking([
+            'Video' => [
+                'S3Object' => [
+                    'Bucket' => env('AWS_BUCKET'),
+                    'Name' => $this->path,
+                ],
+            ],
+        ]);
+
+        $this->job_id = $jobId['JobId'];
+        $this->save();
+
+        return 'success';
+    }
+
+    public static function getPersonTrackingResult($jobId){
+        $rClient = self::getRClient();
+
+        $status = '';
+        while ($status !== 'SUCCEEDED'){
+            sleep(30);
+
+
+            $result = $rClient->getPersonTracking([
+                'JobId' => $jobId,
+                'SortBy'=>'INDEX'
+            ]);
+
+            $status = $result->get('JobStatus');
+
+        }
+
+
+
+//        dump(array_key_last($result));
+//        dump($result[array_key_last($result)]['Person']['Index']+1);
+//        dd($result);
+
+//        return $result;
+        $result = $result->get('Persons');
+
+        if ($result){
+            return $result[array_key_last($result)]['Person']['Index']+1;
+        }
+        else{
+            return 0;
+        }
+    }
 }
