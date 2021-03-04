@@ -1,0 +1,34 @@
+body{
+background:rgb(155, 149, 149) url(neiro.jpg) no-repeat center center fixed;
+-webkit-background-size: cover;
+-moz-background-size: cover;
+-o-background-size: cover;
+background-size: cover;
+
+}
+table {
+font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+text-align: center;
+border-collapse: separate;
+border-spacing: 3px;
+background:rgb(39, 118, 97);
+border-radius: 5px;
+}
+th {
+font-size: 22px;
+font-weight: bold;
+padding: 12px 10px;
+color: rgb(39, 118, 97);
+}
+tr {
+font-size: 22px;
+font-weight: bold;
+padding: 12px 10px;
+color: rgb(39, 118, 97);
+}
+td {
+font-size: 22px;
+font-weight: bold;
+padding: 12px 10px;		
+color: rgb(39, 118, 97);
+}

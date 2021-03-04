@@ -26,8 +26,11 @@ Route::post('label', [VideoController::class, 'labelCheckResults'])->name('label
 
 Route::get('test', [VideoController::class, 'test'])->name('test');
 
-Route::get('tracking', [VideoController::class, 'person'])->name('person');
+Route::get('tracking', [VideoController::class, 'index'])->name('index');
 Route::post('tracking', [VideoController::class, 'personTrackingResult'])->name('personTrackingResult');
+
+Route::get('person', [VideoController::class, 'person'])->name('person');
+
 
 
 Route::post('save', [VideoController::class, 'saveToS3'])->name('saveToS3');
