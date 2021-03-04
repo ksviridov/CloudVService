@@ -87,13 +87,16 @@ class VideoController extends Controller
 
         $video->startPersonTracking();
 
+        $video->check_result = 0;
+        $video->save();
+
 //        if ($video->id % 10 == 0){
 //
 //        }
 //        $result = $video->getPersonTrackingResult($video->job_id);
 
-        if ($video->id > 10){
-            $tenBehind = Video::find($video->id - 11);
+        if ($video->id > 9){
+            $tenBehind = Video::find($video->id - 9);
 
             $tenBehind->check_result = $tenBehind->getPersonTrackingResult($tenBehind->job_id);
             $tenBehind->save();
@@ -103,8 +106,16 @@ class VideoController extends Controller
 
     }
 
-    public function person(){
+    public function index(){
         return view('index');
+    }
+
+    public function person(){
+        $videos = Video::all();
+
+        return view('autoload')->with([
+            'videos' => $videos,
+        ]);
     }
 
     public function saveToS3(Request $request){
